@@ -7,6 +7,9 @@ from "./pdf.service";
 import { chunkText }
 from "../utils/chunking";
 
+import {createEmbedding}
+from '../services/vector/embedding.service'
+
 
 export async function saveDocument(
  file: File
@@ -66,6 +69,14 @@ export async function saveDocument(
  chunkText(
  pdf.text
  );
+
+
+ const embeddings = await Promise.all(
+  chunks.map(async (chunk) => ({
+    text: chunk,
+    embedding: await createEmbedding(chunk),
+  }))
+);
 
 
 

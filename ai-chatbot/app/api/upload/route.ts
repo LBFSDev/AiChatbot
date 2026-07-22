@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { saveDocument } from "../../../services/document.service";
 
+export const runtime = "nodejs";
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();

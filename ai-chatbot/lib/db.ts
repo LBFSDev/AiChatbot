@@ -1,10 +1,12 @@
 import { Pool } from "pg";
 
 
-export const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+console.log(
+    "DATABASE URL:",
+    process.env.DATABASE_URL
+);
+
+
+export const vectorDB = new Pool({
+    connectionString: process.env.DATABASE_URL
 });

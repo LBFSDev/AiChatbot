@@ -10,11 +10,17 @@ from "../utils/chunking";
 import {createEmbedding}
 from '../services/vector/embedding.service'
 
+import {saveEmbedding} 
+from '../services/vector/vector.service'
 
-export async function saveDocument(
- file: File
-) {
+import { createDocument }
+from "./document.repository";
 
+
+
+
+
+export async function saveDocument(file:File){
 
  const bytes =
  await file.arrayBuffer();
@@ -24,72 +30,71 @@ export async function saveDocument(
  Buffer.from(bytes);
 
 
-
  const uploadDir =
- path.join(
- process.cwd(),
- "uploads"
- );
+ path.join(process.cwd(),"uploads");
 
 
- await fs.mkdir(
- uploadDir,
- {
- recursive:true
- }
- );
+ await fs.mkdir(uploadDir,{
+    recursive:true
+ });
 
 
  const filePath =
- path.join(
- uploadDir,
- file.name
- );
+ path.join(uploadDir,file.name);
 
 
  await fs.writeFile(
- filePath,
- buffer
+    filePath,
+    buffer
  );
 
-
-
- // Extract PDF text
 
  const pdf =
- await extractPDFText(
- filePath
- );
+ await extractPDFText(filePath);
+
+ const documentId =
+await createDocument(
+    file.name,
+    pdf.pages
+);
 
 
-
- // Split into chunks
 
  const chunks =
- chunkText(
- pdf.text
- );
+ chunkText(pdf.text);
 
 
- const embeddings = await Promise.all(
-  chunks.map(async (chunk) => ({
-    text: chunk,
-    embedding: await createEmbedding(chunk),
-  }))
-);
+
+
+ for(const chunk of chunks){
+
+    const vector =
+        await createEmbedding(chunk);
+
+  console.log("Chunk length:", chunk.length);
+  console.log("Embedding dimensions:", vector.length);
+
+    await saveEmbedding(
+
+        documentId,
+
+        chunk,
+
+        vector
+
+    );
+
+}
 
 
 
  return {
 
-   filename:file.name,
+    filename:file.name,
 
-   pages:pdf.pages,
+    pages:pdf.pages,
 
-   chunksCount:
-   chunks.length,
-
-   chunks
+    chunksCount:chunks.length
 
  };
 

@@ -1,11 +1,13 @@
 // app/components/chat/Chat.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Message } from "../../types/chat";
 import { Header } from "./Header";
 import { ChatMessages } from "./ChatMessages";
 import { ChatInput } from "./ChatInput";
+import FileUpload from "../PDF/FileUpload";
+
 
 export const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -17,6 +19,39 @@ export const Chat: React.FC = () => {
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);
+
+  type Document = {
+  id: number;
+  filename: string;
+};
+
+const [documents, setDocuments] = useState<Document[]>([]);
+const [selectedDocumentId, setSelectedDocumentId] = useState<number | null>(null);
+
+
+useEffect(() => {
+  async function loadDocuments() {
+    try {
+      const response = await fetch("/api/documents");
+
+      if (!response.ok) {
+        throw new Error("Failed to load documents");
+      }
+
+      const data = await response.json();
+
+      setDocuments(data);
+
+    } catch (error) {
+      console.error("Error loading documents:", error);
+    }
+  }
+
+  loadDocuments();
+
+}, []);
+
+
 const handleSendMessage = async (content: string) => {
   const userMessage: Message = {
     id: Date.now().toString(),
@@ -47,7 +82,7 @@ const handleSendMessage = async (content: string) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        message: content,
+        message: content,document_id:selectedDocumentId
       }),
     });
 
@@ -60,7 +95,7 @@ const handleSendMessage = async (content: string) => {
     const aiMessage: Message = {
       id: Date.now().toString(),
       role: "assistant",
-      content: data.reply,
+      content: data.response,
       createdAt: new Date(),
     };
 
@@ -94,6 +129,21 @@ const handleSendMessage = async (content: string) => {
       <Header onClearChat={handleClearChat} />
       <ChatMessages messages={messages} isLoading={isLoading} />
       <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
+      <select
+ value={selectedDocumentId ?? ""}
+  onChange={(e) =>
+    setSelectedDocumentId(Number(e.target.value))
+  }
+>
+  <option value="">Select a PDF</option>
+
+  {documents?.map((doc) => (
+    <option key={doc?.id} value={doc?.id}>
+      {doc?.filename}
+    </option>
+  ))}
+</select>
+      <FileUpload/>
     </div>
   );
 };

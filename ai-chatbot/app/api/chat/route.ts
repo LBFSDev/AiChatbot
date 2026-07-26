@@ -5,7 +5,7 @@ import { askLLM } from "@/services/ai/ai.service";
 
 export async function POST(req: Request) {
 
-    const { message } = await req.json();
+    const { message,document_id } = await req.json();
 
     console.time("embedding");
     const embedding = await createEmbedding(message);
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
 
     console.time("search");
-    const chunks = await searchSimilarChunks(embedding);
+    const chunks = await searchSimilarChunks(embedding,2,document_id);
     console.timeEnd("search");
 
     console.log("Retrieved chunks:");

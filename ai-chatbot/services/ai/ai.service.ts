@@ -49,7 +49,7 @@ export async function askLLM(prompt: string) {
                     keep_alive:"30m",//keep_alive tells Ollama how long to keep the model loaded in memory after the request finishes.
                     //If another request arrives within those 30 minutes: the model is already loaded so generate answer immediately
                      options:{ // to prevent generating long responses
-                  num_predict:150, //limit the answer length
+                  num_predict:100, //limit the answer length
                    temperature: 0.1 //temperature controls how random or deterministic the model's output is.
                        }
                     

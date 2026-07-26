@@ -1,0 +1,98 @@
+.file-upload-container {
+  max-width: 450px;
+  margin: 20px auto;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.drop-zone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 30px 20px;
+  text-align: center;
+  background-color: #fafafa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.drop-zone:hover,
+.drop-zone.dragging {
+  border-color: #0066ff;
+  background-color: #f0f7ff;
+}
+
+.upload-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.primary-text {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.secondary-text {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.error-message {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #ffe6e6;
+  color: #d93025;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.file-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+.file-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background-color: #f1f3f4;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.file-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.file-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.file-size {
+  font-size: 11px;
+  color: #666;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 50%;
+}
+
+.remove-btn:hover {
+  background-color: #e0e0e0;
+  color: #333;
+}

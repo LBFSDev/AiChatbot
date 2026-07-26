@@ -2,7 +2,7 @@ import { vectorDB } from "@/lib/db";
 
 export async function searchSimilarChunks(
   embedding: number[],
-  limit = 2
+  limit:number,document_id: number
 ) {
   // PostgreSQL expects the vector as a string like "[0.1,0.2,...]"
   const vector = `[${embedding.join(",")}]`;
@@ -19,7 +19,7 @@ export async function searchSimilarChunks(
     ORDER BY embedding <=> $1::vector
     LIMIT $2;
     `,
-    [vector, limit,2]
+    [vector, limit,document_id]
   );
 
       console.log(

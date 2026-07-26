@@ -1,7 +1,7 @@
 export function chunkText(
   text: string,
-  chunkSize = 1000,
-  overlap = 200
+  chunkSize = 2500,
+  overlap = 400
 ) {
 
   const chunks = [];
